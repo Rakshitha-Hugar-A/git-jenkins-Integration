@@ -1,0 +1,50 @@
+pipeline {
+    agent any   // Use any available Jenkins agent
+
+    environment {
+        APP_ENV = 'dev'   // Optional environment variable
+    }
+
+    stages {
+
+        stage('Checkout') {
+            steps {
+                // Pull your project code from GitHub
+                git branch: 'main', url: 'https://github.com/Rakshitha-Hugar-A/MyJenkinProject_DemoPipline'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building the project...'
+                // Run Maven build command
+                bat 'mvn clean install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                // Run Maven test command
+                bat 'mvn test'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                echo "Deploying to ${env.APP_ENV} environment..."
+                // Add your deployment commands here (optional)
+            }
+        }
+
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check the logs!'
+        }
+    }
+}
